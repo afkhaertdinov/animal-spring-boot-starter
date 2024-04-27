@@ -11,8 +11,14 @@ import java.util.List;
 
 @SuppressWarnings("ALL")
 public class InitAnimal {
-    @Value("#{${init.names}}")
-    private final List<String> names = new ArrayList<>(); // Список имён (в методах делать проверку значения)
+    @Value("#{${init.cat.names}}")
+    private final List<String> catNames = new ArrayList<>(); // Список кошачьих имён (в методах делать проверку значения)
+    @Value("#{${init.dog.names}}")
+    private final List<String> dogNames = new ArrayList<>(); // Список собачьих имён (в методах делать проверку значения)
+    @Value("#{${init.wolf.names}}")
+    private final List<String> wolfNames = new ArrayList<>(); // Список волчьих имён (в методах делать проверку значения)
+    @Value("#{${init.shark.names}}")
+    private final List<String> sharkNames = new ArrayList<>(); // Список акульих имён (в методах делать проверку значения)
     @Value("#{${init.secrets}}")
     private final List<String> secrets = new ArrayList<>(); // Список секретных слов (в методах делать проверку значения)
     @Value("#{${init.characters}}")
@@ -26,13 +32,46 @@ public class InitAnimal {
     @Value("${init.enddate:}")
     String enddate; // Конечная возможная дата рождения животного (в методах делать проверку значения)
 
-    // Генерируем и возвращаем случайное имя из списка имён, при отсутствиии списка возвращаем "not Name"
-    public String getName() {
+    // Генерируем и возвращаем случайное кошачье имя из списка имён, при отсутствиии списка возвращаем "not Name"
+    public String getCatName() {
         String name = "not Name";
         SecureRandom randomNum = new SecureRandom();
-        if ((names != null) && (!names.isEmpty())) {
-            int num = randomNum.nextInt(names.size());
-            name = names.get(num);
+        if ((catNames != null) && (!catNames.isEmpty())) {
+            int num = randomNum.nextInt(catNames.size());
+            name = catNames.get(num);
+        }
+        return name;
+    }
+
+    // Генерируем и возвращаем случайное собачье имя из списка имён, при отсутствиии списка возвращаем "not Name"
+    public String getDogName() {
+        String name = "not Name";
+        SecureRandom randomNum = new SecureRandom();
+        if ((dogNames != null) && (!dogNames.isEmpty())) {
+            int num = randomNum.nextInt(dogNames.size());
+            name = dogNames.get(num);
+        }
+        return name;
+    }
+
+    // Генерируем и возвращаем случайное волчье имя из списка имён, при отсутствиии списка возвращаем "not Name"
+    public String getWolfName() {
+        String name = "not Name";
+        SecureRandom randomNum = new SecureRandom();
+        if ((wolfNames != null) && (!wolfNames.isEmpty())) {
+            int num = randomNum.nextInt(wolfNames.size());
+            name = wolfNames.get(num);
+        }
+        return name;
+    }
+
+    // Генерируем и возвращаем случайное акулье имя из списка имён, при отсутствиии списка возвращаем "not Name"
+    public String getSharkName() {
+        String name = "not Name";
+        SecureRandom randomNum = new SecureRandom();
+        if ((sharkNames != null) && (!sharkNames.isEmpty())) {
+            int num = randomNum.nextInt(sharkNames.size());
+            name = sharkNames.get(num);
         }
         return name;
     }
