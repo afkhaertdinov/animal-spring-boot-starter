@@ -1,10 +1,6 @@
 package Service;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -13,26 +9,24 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
-@Configuration
-@ConfigurationPropertiesScan
+@SuppressWarnings("ALL")
 public class InitAnimal {
-    @org.springframework.beans.factory.annotation.Value("#{${init.names}}")
-    private List<String> names = new ArrayList<>(); // Список имён (в методах делать проверку значения)
-    @org.springframework.beans.factory.annotation.Value("#{${init.secrets}}")
-    private List<String> secrets = new ArrayList<>(); // Список секретных слов (в методах делать проверку значения)
-    @org.springframework.beans.factory.annotation.Value("#{${init.characters}}")
-    private List<String> characters = new ArrayList<>(); // Список характеров (в методах делать проверку значения)
-    @org.springframework.beans.factory.annotation.Value("${init.mincount:60}")
+    @Value("#{${init.names}}")
+    private final List<String> names = new ArrayList<>(); // Список имён (в методах делать проверку значения)
+    @Value("#{${init.secrets}}")
+    private final List<String> secrets = new ArrayList<>(); // Список секретных слов (в методах делать проверку значения)
+    @Value("#{${init.characters}}")
+    private final List<String> characters = new ArrayList<>(); // Список характеров (в методах делать проверку значения)
+    @Value("${init.mincount:60}")
     int minCount; // Минимальная цена животных (по умолчанию 60)
-    @org.springframework.beans.factory.annotation.Value("${init.maxcount:1000}")
+    @Value("${init.maxcount:1000}")
     int maxCount; // Максимальная цена животных (по умолчанию 1000)
-    @org.springframework.beans.factory.annotation.Value("${init.startdate:}")
+    @Value("${init.startdate:}")
     String startdate; // Начальная возможная дата рождения животного (в методах делать проверку значения)
-    @org.springframework.beans.factory.annotation.Value("${init.enddate:}")
+    @Value("${init.enddate:}")
     String enddate; // Конечная возможная дата рождения животного (в методах делать проверку значения)
 
+    // Генерируем и возвращаем случайное имя из списка имён, при отсутствиии списка возвращаем "not Name"
     public String getName() {
         String name = "not Name";
         SecureRandom randomNum = new SecureRandom();
@@ -43,6 +37,7 @@ public class InitAnimal {
         return name;
     }
 
+    // Генерируем и возвращаем случайное секретное слово из списка слов, при отсутствиии списка возвращаем "not Secret"
     public String getSecret() {
         String secret = "not Secret";
         SecureRandom randomNum = new SecureRandom();
@@ -53,6 +48,7 @@ public class InitAnimal {
         return secret;
     }
 
+    // Генерируем и возвращаем случайное секретное слово из списка слов, при отсутствиии списка возвращаем "not Characters"
     public String getCharacter() {
         String character = "not Characters";
         SecureRandom randomNum = new SecureRandom();
@@ -63,11 +59,18 @@ public class InitAnimal {
         return character;
     }
 
+    // Генерируем и возвращаем случаную стоимость от minCount до maxCount, по умолчанию [60..1000]
     public Double getCost() {
+        if (minCount < 0) minCount = 0;
+        if (minCount >= maxCount) {
+            minCount = 60;
+            maxCount = 1000;
+        }
         SecureRandom randomNum = new SecureRandom();
-        return randomNum.nextDouble() * maxCount;
+        return minCount + randomNum.nextDouble() * (maxCount - minCount);
     }
 
+    // Генерируем и возвращаем случайную дату рождения в диапазоне [startdate..enddate], по умолчанию [1970-01-01..текущая дата]
     public LocalDate getBirthDate() {
         long start, end;
         if ((startdate == null) || (startdate.isEmpty())) // (по умолчанию 1970-01-01)

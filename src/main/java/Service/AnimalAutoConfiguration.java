@@ -7,6 +7,7 @@ import org.springframework.context.annotation.*;
 @PropertySource("classpath:init.properties")
 public class AnimalAutoConfiguration {
 
+    @SuppressWarnings("unused")
     @Bean
     @ConditionalOnMissingBean
     public InitAnimal initAnimal() {
