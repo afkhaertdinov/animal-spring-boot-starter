@@ -33,48 +33,39 @@ public class InitAnimal {
     String enddate; // Конечная возможная дата рождения животного (в методах делать проверку значения)
 
     // Генерируем и возвращаем случайное кошачье имя из списка имён, при отсутствиии списка возвращаем "not Name"
-    public String getCatName() {
+    public String getName(String breed) {
         String name = "not Name";
         SecureRandom randomNum = new SecureRandom();
-        if ((catNames != null) && (!catNames.isEmpty())) {
-            int num = randomNum.nextInt(catNames.size());
-            name = catNames.get(num);
+        switch (breed) {
+            case "Cat":
+                if ((catNames != null) && (!catNames.isEmpty())) {
+                    int num = randomNum.nextInt(catNames.size());
+                    name = catNames.get(num);
+                }
+                break;
+            case "Dog":
+                if ((dogNames != null) && (!dogNames.isEmpty())) {
+                    int num = randomNum.nextInt(dogNames.size());
+                    name = dogNames.get(num);
+                }
+                break;
+            case "Wolf":
+                if ((wolfNames != null) && (!wolfNames.isEmpty())) {
+                    int num = randomNum.nextInt(wolfNames.size());
+                    name = wolfNames.get(num);
+                }
+                break;
+            case "Shark":
+                if ((sharkNames != null) && (!sharkNames.isEmpty())) {
+                    int num = randomNum.nextInt(sharkNames.size());
+                    name = sharkNames.get(num);
+                }
+                break;
         }
+        if (name.isBlank()) name = "not Name";
         return name;
     }
 
-    // Генерируем и возвращаем случайное собачье имя из списка имён, при отсутствиии списка возвращаем "not Name"
-    public String getDogName() {
-        String name = "not Name";
-        SecureRandom randomNum = new SecureRandom();
-        if ((dogNames != null) && (!dogNames.isEmpty())) {
-            int num = randomNum.nextInt(dogNames.size());
-            name = dogNames.get(num);
-        }
-        return name;
-    }
-
-    // Генерируем и возвращаем случайное волчье имя из списка имён, при отсутствиии списка возвращаем "not Name"
-    public String getWolfName() {
-        String name = "not Name";
-        SecureRandom randomNum = new SecureRandom();
-        if ((wolfNames != null) && (!wolfNames.isEmpty())) {
-            int num = randomNum.nextInt(wolfNames.size());
-            name = wolfNames.get(num);
-        }
-        return name;
-    }
-
-    // Генерируем и возвращаем случайное акулье имя из списка имён, при отсутствиии списка возвращаем "not Name"
-    public String getSharkName() {
-        String name = "not Name";
-        SecureRandom randomNum = new SecureRandom();
-        if ((sharkNames != null) && (!sharkNames.isEmpty())) {
-            int num = randomNum.nextInt(sharkNames.size());
-            name = sharkNames.get(num);
-        }
-        return name;
-    }
 
     // Генерируем и возвращаем случайное секретное слово из списка слов, при отсутствиии списка возвращаем "not Secret"
     public String getSecret() {
@@ -84,6 +75,7 @@ public class InitAnimal {
             int num = randomNum.nextInt(secrets.size());
             secret = secrets.get(num);
         }
+        if (secret.isBlank()) secret = "not Secret";
         return secret;
     }
 
@@ -95,13 +87,19 @@ public class InitAnimal {
             int num = randomNum.nextInt(characters.size());
             character = characters.get(num);
         }
+        if (character.isBlank()) character = "not Character";
         return character;
     }
 
-    // Генерируем и возвращаем случаную стоимость от minCount до maxCount, по умолчанию [60..1000]
+    // Генерируем и возвращаем случайную стоимость от minCount до maxCount, по умолчанию [60..1000]
     public Double getCost() {
-        if (minCount < 0) minCount = 0;
+        if (minCount < 0) {
+            System.out.println("WARN: Неверные входные параметры: <minCount=" + minCount + "> исправлен на значение по умолчанию");
+            minCount = 0;
+        }
+
         if (minCount >= maxCount) {
+            System.out.println("WARN: Неверные входные параметры: <minCount=" + minCount + ">;  <maxCount=" + maxCount + "> исправлены на значения по умолчанию");
             minCount = 60;
             maxCount = 1000;
         }
@@ -113,17 +111,17 @@ public class InitAnimal {
     public LocalDate getBirthDate() {
         long start, end;
         if ((startdate == null) || (startdate.isEmpty())) // (по умолчанию 1970-01-01)
-             start = LocalDate.EPOCH.atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
+            start = LocalDate.EPOCH.atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
         else start = LocalDate.parse(startdate).atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
 
         if ((enddate == null) || (enddate.isEmpty())) // (по умолчанию текущее число)
-             end = LocalDate.now().atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
+            end = LocalDate.now().atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
         else end = LocalDate.parse(enddate).atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
 
         if (start >= end) {
             start = LocalDate.EPOCH.atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
             end = LocalDate.now().atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant().getEpochSecond();
-            System.err.println("Неверные входные параметры: <startdate=" + startdate + ">;  <enddate=" + enddate + ">");
+            System.out.println("WARN: Неверные входные параметры: <startdate=" + startdate + ">;  <enddate=" + enddate + "> исправлены на значения по умолчанию");
         }
 
         double dblRandom = new SecureRandom().nextDouble();
